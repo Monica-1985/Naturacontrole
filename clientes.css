@@ -1,0 +1,156 @@
+
+/* ==================== CLIENTES / CONTAS A RECEBER ==================== */
+
+.navegacao-app {
+  width: min(1400px, 92%);
+  margin: 18px auto -8px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.navegacao-app .btn {
+  text-decoration: none;
+}
+
+.acoes-topo {
+  display: flex;
+  align-items: center;
+}
+
+.btn-topo {
+  background: white;
+  color: var(--verde);
+  text-decoration: none;
+}
+
+.resumo-clientes {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.resumo-clientes .card:nth-child(1) {
+  border-left-color: var(--verde);
+}
+
+.resumo-clientes .card:nth-child(2) {
+  border-left-color: #4c63d2;
+}
+
+.resumo-clientes .card:nth-child(3) {
+  border-left-color: var(--vermelho);
+}
+
+.resumo-clientes .card:nth-child(4) {
+  border-left-color: #d28a2e;
+}
+
+.campo-destaque {
+  background: #f9fafb;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.campo-destaque strong {
+  display: block;
+  font-size: 18px;
+  color: var(--verde);
+  min-height: 22px;
+}
+
+.campo-largo {
+  grid-column: span 2;
+}
+
+.status-cliente {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status-pendente {
+  background: #fff4e5;
+  color: #b54708;
+}
+
+.status-parcial {
+  background: #eef2ff;
+  color: #3447a9;
+}
+
+.status-pago {
+  background: var(--verde-claro);
+  color: var(--verde);
+}
+
+.valor-pendente {
+  color: var(--vermelho);
+  font-weight: bold;
+}
+
+.valor-pago {
+  color: var(--verde);
+  font-weight: bold;
+}
+
+.tabela-clientes {
+  min-width: 1050px;
+}
+
+.tabela-clientes td {
+  vertical-align: middle;
+}
+
+.tabela-clientes .botoes {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1000px) {
+  .resumo-clientes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .resumo-clientes {
+    grid-template-columns: 1fr;
+  }
+
+  .navegacao-app {
+    justify-content: stretch;
+  }
+
+  .navegacao-app .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .acoes-topo {
+    width: 100%;
+  }
+
+  .btn-topo {
+    width: 100%;
+    text-align: center;
+  }
+
+  .campo-largo {
+    grid-column: span 1;
+  }
+}
+
+
+.tabela-clientes tfoot .total-contas-receber {
+  font-weight: 700;
+  border-top: 2px solid var(--borda);
+  background: #f8faf9;
+}
+.tabela-clientes tfoot .total-contas-receber td {
+  padding: 12px 10px;
+}
+#totalFiltradoPendente {
+  color: var(--vermelho);
+  font-size: 16px;
+  white-space: nowrap;
+}

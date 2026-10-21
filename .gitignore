@@ -1,0 +1,12 @@
+# Backups e dados locais
+backup-*.json
+*.bak
+
+# Credenciais e configurações privadas
+.env
+.env.*
+!.env.example
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db

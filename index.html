@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de Vendas Natura</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topo">
+    <div>
+      <h1>Controle de Vendas</h1>
+      <p>Natura • Entradas, saídas e comissões</p>
+    </div>
+    <div class="comissao-padrao">
+      <label for="comissaoPadrao">Comissão padrão (%)</label>
+      <input id="comissaoPadrao" type="number" min="0" max="100" step="0.01" value="30">
+      <button id="salvarComissaoPadrao" type="button">Salvar</button>
+    </div>
+  </header>
+
+
+    <nav class="navegacao-app" aria-label="Navegação do sistema">
+      <a class="btn principal" href="clientes.html">👥 Clientes / Contas a receber</a>
+      <a class="btn principal" href="financeiro.html">💰 Financeiro</a>
+    </nav>
+
+  <main class="container">
+    <section class="resumo">
+      <div class="card entrada">
+        <span>Total de entradas</span>
+        <strong id="totalEntradas">R$ 0,00</strong>
+      </div>
+      <div class="card saida">
+        <span>Total de saídas</span>
+        <strong id="totalSaidas">R$ 0,00</strong>
+      </div>
+      <div class="card saldo">
+        <span>Saldo</span>
+        <strong id="saldo">R$ 0,00</strong>
+      </div>
+      <div class="card comissao">
+        <span>Total de comissões</span>
+        <strong id="totalComissoes">R$ 0,00</strong>
+      </div>
+      <div class="card estoque">
+        <span>Itens em estoque</span>
+        <strong id="totalEstoqueItens">0</strong>
+      </div>
+      <div class="card produtos">
+        <span>Produtos cadastrados</span>
+        <strong id="totalProdutosEstoque">0</strong>
+      </div>
+    </section>
+
+    <section class="painel painel-lancamentos-oculto" id="painelFormularioLancamento">
+      <h2 id="tituloFormulario">Novo lançamento</h2>
+
+      <form id="formLancamento">
+        <input type="hidden" id="idEdicao">
+
+        <div class="grid-form">
+          <div class="campo">
+            <label for="tipo">Tipo *</label>
+            <select id="tipo" required>
+              <option value="entrada">Entrada / Venda</option>
+              <option value="saida">Saída / Despesa</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="data">Data *</label>
+            <input id="data" type="date" required>
+          </div>
+
+          <div class="campo">
+            <label for="produtoEstoqueVenda">Produto do estoque *</label>
+            <select id="produtoEstoqueVenda">
+              <option value="">Selecione o produto vendido</option>
+            </select>
+            <small>Você também pode registrar a venda diretamente pelo botão <strong>💰 Vendido</strong> na tabela do estoque.</small>
+          </div>
+
+          <div class="campo">
+            <label for="descricao">Produto / Descrição *</label>
+            <input id="descricao" type="text" placeholder="Ex.: Kit Natura" required>
+          </div>
+
+          <div class="campo">
+            <label for="quantidadeLancamento">Quantidade *</label>
+            <input id="quantidadeLancamento" type="number" min="1" step="1" value="1" required>
+          </div>
+
+          <div class="campo">
+            <label for="custoUnitario">Preço de custo unitário (R$)</label>
+            <input id="custoUnitario" type="number" min="0" step="0.01" placeholder="0,00">
+          </div>
+
+          <div class="campo">
+            <label for="precoVendaUnitario">Preço de venda unitário (R$)</label>
+            <input id="precoVendaUnitario" type="number" min="0" step="0.01" placeholder="0,00">
+            <small>Para venda Natura: custo ÷ 0,70.</small>
+          </div>
+
+          <div class="campo">
+            <label for="valor">Valor total (R$) *</label>
+            <input id="valor" type="number" min="0" step="0.01" placeholder="0,00" required>
+            <small>Quantidade × preço de venda unitário.</small>
+          </div>
+
+          <div class="campo">
+            <label for="clienteLancamento">Quem comprou</label>
+            <input id="clienteLancamento" type="text" placeholder="Nome do cliente">
+            <small>Se preencher, a compra também será registrada em Clientes / Contas a receber.</small>
+          </div>
+
+          <div class="campo">
+            <label for="vendedor">Vendedor responsável</label>
+            <input id="vendedor" type="text" placeholder="Nome do vendedor">
+          </div>
+
+          <div class="campo">
+            <label for="pagamento">Forma de pagamento</label>
+            <select id="pagamento">
+              <option value="">Selecione</option>
+              <option>Pix</option>
+              <option>Dinheiro</option>
+              <option>Cartão de crédito</option>
+              <option>Cartão de débito</option>
+              <option>Boleto</option>
+              <option>Outro</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="dataPrevistaPagamento">Data prevista para pagamento</label>
+            <input id="dataPrevistaPagamento" type="date">
+          </div>
+
+          <div class="campo">
+            <label for="dataEfetivaPagamento">Data efetiva do pagamento</label>
+            <input id="dataEfetivaPagamento" type="date">
+          </div>
+
+          <div class="campo">
+            <label for="statusPagamento">Pagamento</label>
+            <select id="statusPagamento">
+              <option value="pendente">Pendente</option>
+              <option value="parcial">Parcial</option>
+              <option value="total">Total</option>
+            </select>
+          </div>
+
+          <div class="campo" id="campoValorPago">
+            <label for="valorPago">Valor pago (R$)</label>
+            <input id="valorPago" type="number" min="0" step="0.01" placeholder="0,00">
+            <small>Informe o valor recebido/pago quando for parcial.</small>
+          </div>
+
+          <div class="campo" id="campoComissao">
+            <label for="comissao">Comissão desta venda (%)</label>
+            <input id="comissao" type="number" min="0" max="100" step="0.01" placeholder="Usa a comissão padrão">
+            <small id="previewComissao">A comissão é calculada sobre o valor total da venda.</small>
+          </div>
+
+          <div class="campo">
+            <label for="observacao">Observação</label>
+            <input id="observacao" type="text" placeholder="Opcional">
+          </div>
+        </div>
+
+        <div class="acoes-form">
+          <button class="btn principal" type="submit" id="btnSalvar">Adicionar lançamento</button>
+          <button class="btn secundario oculto" type="button" id="btnCancelar">Cancelar edição</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="painel">
+      <h2 id="tituloEstoque">Cadastro de produto em estoque</h2>
+
+      <form id="formEstoque">
+        <input type="hidden" id="idEstoqueEdicao">
+
+        <div class="grid-form">
+          <div class="campo">
+            <label for="produtoEstoque">Produto *</label>
+            <input id="produtoEstoque" type="text" placeholder="Ex.: Sabonete Natura" required>
+          </div>
+
+          <div class="campo">
+            <label for="codigoProduto">Código</label>
+            <input id="codigoProduto" type="text" placeholder="Opcional">
+          </div>
+
+          <div class="campo">
+            <label for="quantidadeEstoque">Quantidade *</label>
+            <input id="quantidadeEstoque" type="number" min="0" step="1" required>
+          </div>
+
+          <div class="campo">
+            <label for="precoCusto">Preço de custo (R$)</label>
+            <input id="precoCusto" type="number" min="0" step="0.01" placeholder="0,00">
+          </div>
+
+          <div class="campo">
+            <label for="precoVenda">Preço de venda (R$)</label>
+            <input id="precoVenda" type="number" min="0" step="0.01" placeholder="0,00">
+            <small>Na importação por print: venda = custo ÷ 0,70 (30% de lucro sobre a venda).</small>
+          </div>
+
+          <div class="campo">
+            <label for="estoqueMinimo">Estoque mínimo</label>
+            <input id="estoqueMinimo" type="number" min="0" step="1" value="0">
+          </div>
+        </div>
+
+        <div class="acoes-form">
+          <button class="btn principal" type="submit" id="btnSalvarEstoque">Adicionar produto</button>
+          <button class="btn secundario oculto" type="button" id="btnCancelarEstoque">Cancelar edição</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="painel">
+      <div class="cabecalho-tabela">
+        <div>
+          <h2>Estoque</h2>
+          <p id="contadorEstoque">0 produtos</p>
+        </div>
+        <div class="filtros">
+          <input id="filtroEstoque" type="search" placeholder="Buscar produto ou código">
+          <input id="arquivoPrint" type="file" accept="image/*" hidden>
+          <button class="btn principal btn-importar" type="button" id="btnImportarPrint">📷 Importar por print</button>
+          <button class="btn secundario" type="button" id="btnEditarSelecionadosEstoque">✏️ Editar selecionados</button>
+          <button class="btn exportar excel" type="button" id="btnExportarEstoqueExcel">📊 Excel</button>
+          <button class="btn exportar pdf" type="button" id="btnExportarEstoquePDF">📄 PDF</button>
+        </div>
+      </div>
+
+      <div class="tabela-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-selecao"><input id="selecionarTodosEstoque" type="checkbox" title="Selecionar todos"></th>
+              <th>Produto</th>
+              <th>Quantidade</th>
+              <th>Estoque mínimo</th>
+              <th>Preço de custo</th>
+              <th>Preço de venda</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaEstoque"></tbody>
+          <tfoot>
+            <tr>
+              <th colspan="6" style="text-align:right;">Total do estoque</th>
+              <th id="totalValorEstoque">R$ 0,00</th>
+              <th></th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div id="mensagemEstoqueVazio" class="vazio">
+        Nenhum produto cadastrado no estoque.
+      </div>
+    </section>
+
+    <section class="painel painel-lancamentos-oculto" id="painelTabelaLancamentos">
+      <div class="cabecalho-tabela">
+        <div>
+          <h2>Lançamentos</h2>
+          <p id="contador">0 registros</p>
+        </div>
+        <div class="filtros">
+          <input id="filtroTexto" type="search" placeholder="Buscar produto ou vendedor">
+          <select id="filtroTipo">
+            <option value="">Todos</option>
+            <option value="entrada">Entradas</option>
+            <option value="saida">Saídas</option>
+          </select>
+          <input id="filtroData" type="date" title="Filtrar por data">
+          <input id="arquivoPrintLancamento" type="file" accept="image/*" hidden>
+          <button class="btn principal btn-importar" type="button" id="btnImportarPrintLancamento">📷 Importar por print</button>
+          <button class="btn secundario" type="button" id="btnEditarSelecionadosLancamentos">✏️ Editar selecionados</button>
+          <button class="btn exportar excel" type="button" id="btnExportarExcel">📊 Excel</button>
+          <button class="btn exportar pdf" type="button" id="btnExportarPDF">📄 PDF</button>
+        </div>
+      </div>
+
+      <div class="tabela-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-selecao"><input id="selecionarTodosLancamentos" type="checkbox" title="Selecionar todos"></th>
+              <th>Data</th>
+              <th>Produto</th>
+              <th>Qtd.</th>
+              <th>Custo unit.</th>
+              <th>Venda unit.</th>
+              <th>Valor total</th>
+              <th>Vendedor</th>
+              <th>Pagamento</th>
+              <th>Comissão (%)</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaLancamentos"></tbody>
+        </table>
+      </div>
+
+      <div id="mensagemVazia" class="vazio">
+        Nenhum lançamento cadastrado.
+      </div>
+
+      <div class="total-painel">
+        <span>Total dos lançamentos exibidos</span>
+        <strong id="totalLancamentosExibidos">R$ 0,00</strong>
+      </div>
+    </section>
+  </main>
+
+  <div id="modalImportacao" class="modal oculto">
+    <div class="modal-conteudo">
+      <div class="modal-cabecalho">
+        <div>
+          <h2>Conferir produtos encontrados</h2>
+          <p id="statusOCR">Aguardando leitura...</p>
+        </div>
+        <button class="fechar-modal" type="button" id="btnFecharModal" aria-label="Fechar">×</button>
+      </div>
+
+      <div id="progressoOCR" class="progresso-ocr oculto">
+        <div class="barra-progresso"><span id="barraOCR"></span></div>
+        <span id="textoProgressoOCR">Lendo imagem...</span>
+      </div>
+
+      <div class="campo destino-importacao">
+        <label for="destinoImportacao"><strong>Importar como:</strong></label>
+        <select id="destinoImportacao">
+          <option value="estoque">📦 Estoque</option>
+        </select>
+        <small id="ajudaDestinoImportacao">O valor do print será considerado <strong>preço de custo</strong>. A venda será calculada por custo ÷ 0,70, ou seja, 30% de lucro sobre o preço de venda.</small>
+      </div>
+
+      <div class="tabela-wrapper">
+        <table class="tabela-importacao">
+          <thead>
+            <tr>
+              <th><input id="selecionarTodosImportacao" type="checkbox" checked></th>
+              <th>Produto</th>
+              <th>Código</th>
+              <th>Qtd.</th>
+              <th>Custo</th>
+              <th>Preço de venda</th>
+              <th>Valor total</th>
+              <th id="thVendedorImportacao" class="col-lancamento-importacao">Vendedor</th>
+              <th id="thComissaoImportacao" class="col-lancamento-importacao">Comissão (%)</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaImportacao"></tbody>
+        </table>
+      </div>
+
+      <div id="mensagemOCR" class="vazio oculto"></div>
+
+      <div class="acoes-modal">
+        <button class="btn secundario" type="button" id="btnCancelarImportacao">Cancelar</button>
+        <button class="btn principal" type="button" id="btnImportarSelecionados">💾 Salvar selecionados</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="modalEdicaoMassa" class="modal oculto">
+    <div class="modal-conteudo modal-edicao-massa">
+      <div class="modal-cabecalho">
+        <div>
+          <h2 id="tituloEdicaoMassa">Editar selecionados</h2>
+          <p>Preencha somente o que deseja alterar. Campos vazios não serão modificados.</p>
+        </div>
+        <button class="fechar-modal" type="button" id="btnFecharEdicaoMassa" aria-label="Fechar">×</button>
+      </div>
+
+      <div class="grid-form">
+        <div class="campo" id="massaVendedor">
+          <label for="massaVendedorInput">Vendedor</label>
+          <input id="massaVendedorInput" type="text" placeholder="Novo vendedor">
+        </div>
+
+        <div class="campo" id="massaComissao">
+          <label for="massaComissaoInput">Comissão (%)</label>
+          <input id="massaComissaoInput" type="number" min="0" max="100" step="0.01" placeholder="Ex.: 27">
+        </div>
+
+        <div class="campo" id="massaStatus">
+          <label for="massaStatusInput">Status do pagamento</label>
+          <select id="massaStatusInput">
+            <option value="">Não alterar</option>
+            <option value="pendente">Pendente</option>
+            <option value="parcial">Parcial</option>
+            <option value="total">Total</option>
+          </select>
+        </div>
+
+        <div class="campo" id="massaMinimo">
+          <label for="massaMinimoInput">Estoque mínimo</label>
+          <input id="massaMinimoInput" type="number" min="0" step="1" placeholder="Novo mínimo">
+        </div>
+
+        <div class="campo" id="massaCusto">
+          <label for="massaCustoInput">Preço de custo</label>
+          <input id="massaCustoInput" type="number" min="0" step="0.01" placeholder="Novo custo">
+        </div>
+
+        <div class="campo" id="massaVenda">
+          <label for="massaVendaInput">Preço de venda</label>
+          <input id="massaVendaInput" type="number" min="0" step="0.01" placeholder="Nova venda">
+        </div>
+
+        <div class="campo" id="massaQuantidade">
+          <label for="massaQuantidadeInput">Quantidade</label>
+          <input id="massaQuantidadeInput" type="number" min="0" step="1" placeholder="Nova quantidade">
+        </div>
+      </div>
+
+      <div class="acoes-modal">
+        <button class="btn secundario" type="button" id="btnCancelarEdicaoMassa">Cancelar</button>
+        <button class="btn principal" type="button" id="btnSalvarEdicaoMassa">💾 Salvar alterações</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Controle de Vendas Natura • Dados salvos neste navegador</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

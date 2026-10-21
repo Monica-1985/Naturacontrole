@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financeiro | Controle Natura</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="financeiro.css">
+</head>
+<body>
+  <header class="topo">
+    <div>
+      <h1>Financeiro</h1>
+      <p>Natura • Vendas, recebimentos e valores pendentes</p>
+    </div>
+    <div class="acoes-topo">
+      <a class="btn btn-topo" href="index.html">← Voltar para estoque</a>
+    </div>
+  </header>
+
+  <nav class="navegacao-app" aria-label="Navegação do sistema">
+    <a class="btn secundario" href="index.html">📦 Estoque</a>
+    <a class="btn secundario" href="clientes.html">👥 Clientes / Contas a receber</a>
+  </nav>
+
+  <main class="container">
+    <section class="resumo resumo-financeiro">
+      <div class="card financeiro-vendido"><span>Total vendido</span><strong id="totalVendido">R$ 0,00</strong><small>Valor total das vendas cadastradas</small></div>
+      <div class="card financeiro-recebido"><span>Total recebido</span><strong id="totalRecebido">R$ 0,00</strong><small>Inclui valores pagos registrados anteriormente</small></div>
+      <div class="card financeiro-pendente"><span>Total pendente</span><strong id="totalPendente">R$ 0,00</strong><small>Valor que ainda falta receber</small></div>
+      <div class="card financeiro-mes"><span>Recebido no mês selecionado</span><strong id="recebidoMes">R$ 0,00</strong><small id="mesSelecionadoTexto">Mês atual</small></div>
+    </section>
+
+    <section class="painel">
+      <div class="titulo-financeiro">
+        <div><h2>Consultar período</h2><p>Veja quanto entrou em cada mês ou em um dia específico.</p></div>
+        <div class="campo filtro-mes"><label for="filtroMes">Mês de referência</label><input id="filtroMes" type="month"></div>
+      </div>
+      <div class="resumo-periodo">
+        <div><span>Vendas no mês</span><strong id="vendasMes">R$ 0,00</strong></div>
+        <div><span>Recebimentos no mês</span><strong id="recebimentosMesDetalhe">R$ 0,00</strong></div>
+        <div><span>Recebimentos no dia</span><strong id="recebimentosDia">R$ 0,00</strong></div>
+      </div>
+      <div class="campo filtro-dia"><label for="filtroDia">Consultar recebimentos de um dia</label><input id="filtroDia" type="date"></div>
+    </section>
+
+    <section class="painel">
+      <h2>Registrar recebimento</h2>
+      <p class="texto-ajuda">Use esta área toda vez que receber uma parcela. Cada pagamento fica salvo com sua própria data, sem apagar os pagamentos anteriores.</p>
+      <form id="formRecebimento">
+        <div class="grid-form">
+          <div class="campo campo-largo"><label for="compraRecebimento">Cliente / compra *</label><select id="compraRecebimento" required><option value="">Selecione uma compra com saldo pendente</option></select></div>
+          <div class="campo"><label for="valorRecebimento">Valor recebido (R$) *</label><input id="valorRecebimento" type="number" min="0.01" step="0.01" required placeholder="0,00"></div>
+          <div class="campo"><label for="dataRecebimento">Data em que recebeu *</label><input id="dataRecebimento" type="date" required></div>
+          <div class="campo"><label for="formaRecebimento">Forma de pagamento *</label><select id="formaRecebimento" required><option value="">Selecione</option><option>Pix</option><option>Dinheiro</option><option>Cartão de crédito</option><option>Cartão de débito</option><option>Boleto</option><option>Transferência</option><option>Outro</option></select></div>
+          <div class="campo"><label for="observacaoRecebimento">Observação</label><input id="observacaoRecebimento" type="text" placeholder="Ex.: 2ª parcela"></div>
+        </div>
+        <div id="saldoCompraSelecionada" class="saldo-compra">Selecione uma compra para ver o saldo que falta receber.</div>
+        <div class="acoes-form"><button class="btn principal" type="submit">Registrar recebimento</button></div>
+      </form>
+    </section>
+
+    <section class="painel">
+      <div class="titulo-financeiro"><div><h2>Comparação mensal</h2><p>Valores recebidos por mês, conforme os pagamentos registrados.</p></div></div>
+      <div id="comparacaoMensal" class="comparacao-mensal"></div>
+    </section>
+
+    <section class="painel">
+      <div class="titulo-financeiro"><div><h2>Histórico de recebimentos</h2><p>Filtre por mês ou por dia para conferir as parcelas recebidas.</p></div><strong id="contadorRecebimentos">0 pagamentos</strong></div>
+      <div class="tabela-responsiva"><table class="tabela-financeiro"><thead><tr><th>Data</th><th>Cliente</th><th>Produto / compra</th><th>Vendedor</th><th>Forma</th><th>Valor recebido</th><th>Observação</th></tr></thead><tbody id="tabelaRecebimentos"></tbody></table></div>
+      <p id="mensagemRecebimentosVazia" class="mensagem-vazia">Nenhum recebimento registrado neste período.</p>
+      <p class="aviso-historico">Importante: pagamentos que já estavam registrados antes desta página continuam contando nos totais. Como os registros antigos guardavam apenas o total pago, eles só aparecerão no histórico mensal quando você cadastrar os pagamentos com suas datas individuais.</p>
+    </section>
+  </main>
+  <script src="financeiro.js"></script>
+</body>
+</html>
